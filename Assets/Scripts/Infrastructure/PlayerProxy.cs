@@ -43,7 +43,7 @@ namespace Infrastructure
 
         private void OnGameSessionCreated(string gameSessionId)
         {
-            
+             
         }
 
         public void JoinGameSession()
