@@ -8,7 +8,6 @@ public class SignalTest : MonoBehaviour
     private string _url = "https://localhost:7141";
 
     private HubConnection _hubConnection;
-    //private 
     
     private void Start()
     {
@@ -28,6 +27,8 @@ public class SignalTest : MonoBehaviour
             Debug.Log("Received: " + message);
         });
 
+        
+        
         await _hubConnection.StartAsync();
 
         await _hubConnection.SendAsync("Send", "my msg");
