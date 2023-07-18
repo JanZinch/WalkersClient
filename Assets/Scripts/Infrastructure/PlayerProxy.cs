@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Data.Common;
 using Api;
 using Core;
+using Core.DataModels;
 using Microsoft.AspNetCore.SignalR.Client;
 using UnityEngine;
 
@@ -20,16 +22,20 @@ namespace Infrastructure
 
         private void Start()
         {
-            ConnectToHub();
+            
         }
 
-        private void ConnectToHub()
+        [EasyButtons.Button]
+        private async void ConnectToHub()
         {
             _hubConnection = new HubConnectionBuilder().WithUrl(HubUrl).Build();
-            _hubConnection.StartAsync();
+            await _hubConnection.StartAsync();
+            
+            Debug.Log("Connected");
         }
 
-        public void CreateGameSession()
+        [EasyButtons.Button]
+        public async void CreateGameSession()
         {
             _player = new Player()
             {
@@ -37,13 +43,22 @@ namespace Infrastructure
                 Role = PlayerRole.Host,
             };
             
-            _hubConnection.SendAsync(ServerApi.CreateGameSession, _player);
             _hubConnection.On<string>(nameof(OnGameSessionCreated), OnGameSessionCreated);
+
+            
+            
+            await _hubConnection.SendAsync(ServerApi.CreateGameSession, new PlayerDataModel()
+            {
+                Id = _player.Id,
+                Role = _player.Role,
+            });
+            
+            Debug.Log("Sent");
         }
 
         private void OnGameSessionCreated(string gameSessionId)
         {
-             
+             Debug.Log("On game session created: " + gameSessionId);
         }
 
         public void JoinGameSession()

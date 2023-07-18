@@ -5,17 +5,15 @@ using UnityEngine;
 
 public class SignalTest : MonoBehaviour
 {
-    private string _url = "https://localhost:7141";
-
+    
     private HubConnection _hubConnection;
     
     private void Start()
     {
         Debug.Log("Hello");
-        
-        Invoke(nameof(Connect), 1.0f);
     }
 
+    [EasyButtons.Button]
     private async void Connect()
     {
         _hubConnection = new HubConnectionBuilder()
@@ -26,8 +24,6 @@ public class SignalTest : MonoBehaviour
         {
             Debug.Log("Received: " + message);
         });
-
-        
         
         await _hubConnection.StartAsync();
 
