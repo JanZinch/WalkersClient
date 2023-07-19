@@ -19,14 +19,10 @@ namespace Infrastructure
         {
             DontDestroyOnLoad(gameObject);
         }
-
-        private void Start()
-        {
-            
-        }
+        
 
         [EasyButtons.Button]
-        private async void ConnectToHub()
+        public async void ConnectToHub()
         {
             _hubConnection = new HubConnectionBuilder().WithUrl(HubUrl).Build();
             await _hubConnection.StartAsync();
@@ -45,7 +41,7 @@ namespace Infrastructure
             
             _hubConnection.On<string>(nameof(OnGameSessionCreated), OnGameSessionCreated);
 
-            
+            _hubConnection.On<string>(nameof(OnGameSessionCreated), OnGameSessionCreated);
             
             await _hubConnection.SendAsync(ServerApi.CreateGameSession, new PlayerDataModel()
             {
@@ -61,6 +57,11 @@ namespace Infrastructure
              Debug.Log("On game session created: " + gameSessionId);
         }
 
+        private void OnGameSessionStarted(string gameSessionId)
+        {
+            Debug.Log("On game session created: " + gameSessionId);
+        }
+        
         public void JoinGameSession()
         {
             _player = new Player()
